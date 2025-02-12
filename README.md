@@ -32,6 +32,7 @@ This guide provides a step-by-step approach to integrating two Salesforce orgs u
      - **Perform requests on your behalf at any time (refresh_token, offline_access)**  
 5. Click **Save & Continue**.  
 6. Copy the **Consumer Key** and **Consumer Secret** (needed for Source org authentication).  
+![image](https://github.com/user-attachments/assets/0b5cfd4e-330c-4a70-a271-a8443edbf0d2)
 
 ---
 
