@@ -90,14 +90,3 @@ public with sharing class AccountHelper {
     }
 
 }
-
-
-/*
-Sites used- 
-https://blog.skyvia.com/salesforce-to-salesforce-integration/
-https://www.forcetalks.com/blog/integrating-one-salesforce-org-to-another-salesforce-org-using-rest-api/
-https://trailhead.salesforce.com/trailblazer-community/feed/0D54V00007T40BRSAZ
-https://salesforcecodex.com/salesforce/sending-wrapper-object-to-apex-from-lwc/#google_vignette
-https://blogs.perficient.com/2023/12/21/row-level-actions-in-lightning-datatable-in-lightning-web-component/
-
-*/
