@@ -33,6 +33,8 @@ This guide provides a step-by-step approach to integrating two Salesforce orgs u
 5. Click **Save & Continue**.  
 6. Copy the **Consumer Key** and **Consumer Secret** (needed for Source org authentication).  
 ![image](https://github.com/user-attachments/assets/0b5cfd4e-330c-4a70-a271-a8443edbf0d2)
+![image](https://github.com/user-attachments/assets/0ed6cd2b-3ca5-48be-98f2-a886606bbc81)
+
 
 ---
 
@@ -47,7 +49,9 @@ This guide provides a step-by-step approach to integrating two Salesforce orgs u
    - **Authorize Endpoint URL**: `https://login.salesforce.com/services/oauth2/authorize`  
    - **Token Endpoint URL**: `https://login.salesforce.com/services/oauth2/token`  
 4. Click **Save** and copy the **Callback URL** generated.  
-5. Go back to **Connected App in Target ORG**, edit it, and add this **Callback URL**.  
+5. Go back to **Connected App in Target ORG**, edit it, and add this **Callback URL**.
+   ![image](https://github.com/user-attachments/assets/a08ae83c-0a6c-4739-8dc5-608bbb930406)
+ 
 
 ---
 
@@ -60,7 +64,9 @@ This guide provides a step-by-step approach to integrating two Salesforce orgs u
    - **Identity Type**: Named Principal  
    - **Authentication Protocol**: OAuth 2.0  
    - **Auth Provider**: Select the Auth Provider created in Step 2  
-3. Click **Save**.  
+3. Click **Save**.
+   ![image](https://github.com/user-attachments/assets/9177826b-2b35-43b2-9251-171fde78e9bb)
+
 
 ---
 
@@ -68,85 +74,13 @@ This guide provides a step-by-step approach to integrating two Salesforce orgs u
 Create an Apex class in the **Source Org** to make API requests to the **Target Org**.  
 
 #### **Apex Class: AccountHelper.cls**  
-```apex
-public with sharing class AccountHelper {
-    public class AccountRequest {
-        public String Name;
-        public String Type;
-        public Decimal AnnualRevenue;
-        public String Phone;
-        public String Website;
-        public String Rating;
-    }
-    
-    @AuraEnabled(cacheable=true)
-    public static List<Account> getAccountList() {        
-        HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:TargetOrg_NC/services/apexrest/Account/');
-        req.setHeader('Content-Type', 'application/json');
-        req.setMethod('GET');
-        Http http = new Http();
-        HttpResponse res = http.send(req);
-        
-        if (res.getStatusCode() == 200) {
-            return (List<Account>) JSON.deserialize(res.getBody(), List<Account>.class);
-        } else {
-            throw new AuraHandledException('Error retrieving accounts: ' + res.getStatus());
-        }
-    }
 
-    @AuraEnabled
-    public static void createOrUpdateAccount(String accData) {
-        AccountRequest acc = (AccountRequest) JSON.deserialize(accData, AccountRequest.class);
-        
-        HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:TargetOrg_NC/services/apexrest/Account/');
-        req.setHeader('Content-Type', 'application/json');
-        req.setMethod('POST');
-        req.setBody(JSON.serialize(acc));
-        
-        Http http = new Http();
-        HttpResponse res = http.send(req);
-        
-        if (res.getStatusCode() != 200) {
-            throw new AuraHandledException('Failed to create/update account: ' + res.getStatus());
-        }
-    }
-}
-```
 
 ---
 
 ### **STEP 5: Create a REST Apex Class in Target ORG**  
 Create a REST API to handle account operations in the **Target Org**.  
 
-#### **Apex Class: AccountRestAPI.cls**  
-```apex
-@RestResource(urlMapping='/Account/*')
-global with sharing class AccountRestAPI {
-    @HttpGet
-    global static List<Account> getAccounts() {
-        return [SELECT Id, Name, Type, AnnualRevenue, Phone, Website, Rating FROM Account LIMIT 10];
-    }
-
-    @HttpPost
-    global static String createOrUpdateAccount(String accData) {
-        Account acc = (Account) JSON.deserialize(accData, Account.class);
-        
-        List<Account> accList = [SELECT Id FROM Account WHERE Name = :acc.Name LIMIT 1];
-        if (!accList.isEmpty()) {
-            acc.Id = accList[0].Id;
-            update acc;
-            return 'Account updated successfully';
-        } else {
-            insert acc;
-            return 'Account created successfully';
-        }
-    }
-}
-```
-
----
 
 ## **Testing the Integration**  
 
