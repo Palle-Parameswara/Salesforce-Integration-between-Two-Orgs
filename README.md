@@ -108,7 +108,8 @@ Create a REST API to handle account operations in the **Target Org**.
 ## **References**  
 - [Salesforce Named Credentials](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_callouts_named_credentials.htm)  
 - [Salesforce REST API Guide](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/)  
-- [OAuth 2.0 Authorization in Salesforce](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_web_server_flow.htm&type=5)  
+- [OAuth 2.0 Authorization in Salesforce](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_web_server_flow.htm&type=5)
+- https://www.youtube.com/watch?v=xWvnUc-w-4o 
 
 ---
 
