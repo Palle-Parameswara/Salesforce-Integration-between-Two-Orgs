@@ -1,0 +1,25 @@
+<template>
+    <h2>Account Datatable</h2>
+    <lightning-button label="New" onclick={handleNewButtonClick}></lightning-button>
+
+    <template if:true={accList}>
+        <lightning-datatable data={accList} columns={columns} key-field="Id" onrowaction={handleRowAction}></lightning-datatable>
+    </template>
+
+    <template if:true={error}>
+        {error}
+    </template>
+
+    <template if:true={isNewAccountFormVisible}>
+        <lightning-record-edit-form object-api-name="Account">
+            <lightning-input-field field-name="Name" value={newAccount.Name} onchange={handleInputChange}></lightning-input-field>
+            <lightning-input-field field-name="Type" value={newAccount.Type} onchange={handleInputChange}></lightning-input-field>
+            <lightning-input-field field-name="AnnualRevenue" value={newAccount.AnnualRevenue} onchange={handleInputChange}></lightning-input-field>
+            <lightning-input-field field-name="Phone" value={newAccount.Phone} onchange={handleInputChange}></lightning-input-field>
+            <lightning-input-field field-name="Website" value={newAccount.Website} onchange={handleInputChange}></lightning-input-field>
+            <lightning-input-field field-name="Rating" value={newAccount.Rating} onchange={handleInputChange}></lightning-input-field>
+            <lightning-button label="Submit" onclick={handleSubmitClick}></lightning-button>
+            <lightning-button label="Cancel" onclick={handleCancelClick}></lightning-button>
+        </lightning-record-edit-form>
+    </template>
+</template>
