@@ -75,6 +75,9 @@ Create an Apex class in the **Source Org** to make API requests to the **Target 
 
 #### **Apex Class: AccountHelper.cls**  
 
+Create LWC component for display 
+#### **LWC Component: getAccountdetailsifrequiredsaveaccountdetailstoo**
+
 
 ---
 
