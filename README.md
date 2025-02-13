@@ -83,6 +83,8 @@ Create LWC component for display
 
 ### **STEP 5: Create a REST Apex Class in Target ORG**  
 Create a REST API to handle account operations in the **Target Org**.  
+#### **Apex Class: RestApiUsingConnectClass.cls**  
+
 
 
 ## **Testing the Integration**  
