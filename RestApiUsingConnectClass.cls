@@ -8,11 +8,7 @@ global with sharing class RestApiUsingConnectClass {
         public String Website { get; set; }
         public String Rating { get; set; }
     }
-    public void printAccountResponse(Integer t){
-        String response='{"Name":"herghrefghjr","Type":"Customer - Direct","AnnualRevenue":4738793,"Phone":"327833868632","Website":"www.kebehjgh.com","Rating":"Warm"}' ;
-        AccountResponse ar = (AccountResponse) JSON.deserialize(response, AccountResponse.class);
-        System.debug('response '+ar);
-    }
+    
     @HttpGet
     global static List<Account> getAccounts(){
         System.debug('GET Method has been called');
