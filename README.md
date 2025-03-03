@@ -1,6 +1,4 @@
-Here’s a well-structured **README.md** file that you can use for your GitHub repository documenting the steps for **Salesforce to Salesforce Integration using OAuth 2.0**.  
 
----
 
 # **Salesforce to Salesforce Integration using OAuth 2.0**  
 
