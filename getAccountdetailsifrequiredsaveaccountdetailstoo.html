@@ -1,25 +1,71 @@
 <template>
-    <h2>Account Datatable</h2>
-    <lightning-button label="New" onclick={handleNewButtonClick}></lightning-button>
+    <!-- Accounts List Card -->
+    <lightning-card title="Accounts" icon-name="standard:account">
+        <div class="slds-p-around_medium">
+            <lightning-button 
+                label="New Account" 
+                variant="brand" 
+                onclick={handleNewButtonClick}>
+            </lightning-button>
+        </div>
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            <template if:true={accList}>
+                <lightning-datatable 
+                    data={accList} 
+                    columns={columns} 
+                    key-field="Id" 
+                    onrowaction={handleRowAction}>
+                </lightning-datatable>
+            </template>
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-m-top_small">
+                    {error}
+                </div>
+            </template>
+        </div>
+    </lightning-card>
 
-    <template if:true={accList}>
-        <lightning-datatable data={accList} columns={columns} key-field="Id" onrowaction={handleRowAction}></lightning-datatable>
-    </template>
-
-    <template if:true={error}>
-        {error}
-    </template>
-
+    <!-- Modal Popup for New Account Form -->
     <template if:true={isNewAccountFormVisible}>
-        <lightning-record-edit-form object-api-name="Account">
-            <lightning-input-field field-name="Name" value={newAccount.Name} onchange={handleInputChange}></lightning-input-field>
-            <lightning-input-field field-name="Type" value={newAccount.Type} onchange={handleInputChange}></lightning-input-field>
-            <lightning-input-field field-name="AnnualRevenue" value={newAccount.AnnualRevenue} onchange={handleInputChange}></lightning-input-field>
-            <lightning-input-field field-name="Phone" value={newAccount.Phone} onchange={handleInputChange}></lightning-input-field>
-            <lightning-input-field field-name="Website" value={newAccount.Website} onchange={handleInputChange}></lightning-input-field>
-            <lightning-input-field field-name="Rating" value={newAccount.Rating} onchange={handleInputChange}></lightning-input-field>
-            <lightning-button label="Submit" onclick={handleSubmitClick}></lightning-button>
-            <lightning-button label="Cancel" onclick={handleCancelClick}></lightning-button>
-        </lightning-record-edit-form>
+        <!-- Modal Container -->
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium">New Account</h2>
+                </header>
+                <!-- Modal Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-record-edit-form object-api-name="Account">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-p-bottom_small">
+                                <lightning-input-field field-name="Name" value={newAccount.Name} onchange={handleInputChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-input-field field-name="Type" value={newAccount.Type} onchange={handleInputChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-input-field field-name="AnnualRevenue" value={newAccount.AnnualRevenue} onchange={handleInputChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-input-field field-name="Phone" value={newAccount.Phone} onchange={handleInputChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-input-field field-name="Website" value={newAccount.Website} onchange={handleInputChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-input-field field-name="Rating" value={newAccount.Rating} onchange={handleInputChange}></lightning-input-field>
+                            </div>
+                        </div>
+                        <div class="slds-m-top_medium">
+                            <lightning-button label="Submit" variant="brand" onclick={handleSubmitClick} class="slds-m-right_small"></lightning-button>
+                            <lightning-button label="Cancel" onclick={handleCancelClick}></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <!-- Modal Backdrop -->
+        <div class="slds-backdrop slds-backdrop_open"></div>
     </template>
 </template>
