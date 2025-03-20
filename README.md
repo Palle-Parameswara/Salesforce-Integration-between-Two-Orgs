@@ -24,7 +24,7 @@ This guide provides a step-by-step approach to integrating two Salesforce orgs u
    - Contact Email: `your-email@example.com`  
 4. Under **API (Enable OAuth Settings)**:  
    - ✅ **Enable OAuth Settings**  
-   - Callback URL: `https://login.salesforce.com/services/oauth2/callback`  
+   - Callback URL: `https://login.salesforce.com/services/oauth2/callback`  (dummy URL for timebeing)
    - Select OAuth Scopes:  
      - **Full access (full)**
      - **Perform requests on your behalf at any time (refresh_token, offline_access)**  
@@ -58,11 +58,12 @@ This guide provides a step-by-step approach to integrating two Salesforce orgs u
 2. Provide the details:  
    - **Label**: `TargetOrg_NC`  
    - **Name**: `TargetOrg_NC`  
-   - **URL**: `https://your-target-org.my.salesforce.com`  
+   - **URL**: `https://your-target-org.my.salesforce.com`  (copy the current my domain URL from the my domain of target Org)
    - **Identity Type**: Named Principal  
    - **Authentication Protocol**: OAuth 2.0  
    - **Auth Provider**: Select the Auth Provider created in Step 2  
 3. Click **Save**.
+4. After this a login page occurs where you have to login to target org.
    ![image](https://github.com/user-attachments/assets/9177826b-2b35-43b2-9251-171fde78e9bb)
 
 
