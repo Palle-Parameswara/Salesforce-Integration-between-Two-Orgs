@@ -1,0 +1,20 @@
+<template>
+    <lightning-card title="Back Office Sync" icon-name="utility:upload">
+        <div class="slds-p-around_medium slds-is-relative">
+            <template if:true={isSending}>
+                <lightning-spinner alternative-text="Sending..." size="small"></lightning-spinner>
+            </template>
+            <p class="slds-m-bottom_small">
+                Send this Integration Request to the Back Office (Target Org).
+            </p>
+            <lightning-button
+                variant="brand"
+                label="Send to Back Office"
+                title="Send to Back Office"
+                icon-name="utility:send"
+                onclick={handleSend}
+                disabled={isSending}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>

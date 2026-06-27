@@ -1,0 +1,21 @@
+# --- Salesforce CLI / local state ---
+.sf/
+.sfdx/
+.localdevserver/
+deploy-options.json
+
+# --- Secrets & auth — NEVER commit ---
+# Authorization files, org logins, and any exported credentials
+**/authFiles/
+*.key
+.env
+.env.*
+
+# Manual-setup secrets (Consumer Key/Secret, callback URLs, tokens).
+# The manual-setup/ folder holds personal notes only; keep filled-in copies local.
+manual-setup/*.local.md
+
+# --- OS / editor noise ---
+.DS_Store
+node_modules/
+*.log

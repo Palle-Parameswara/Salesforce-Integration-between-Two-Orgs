@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_Record_Id__c</fullName>
+    <label>Source Record Id</label>
+    <description>Id of the originating Integration_Request__c record in the Source Org.</description>
+    <type>Text</type>
+    <length>255</length>
+    <required>false</required>
+    <externalId>true</externalId>
+</CustomField>

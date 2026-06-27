@@ -1,0 +1,10 @@
+{
+  "packageDirectories": [
+    { "path": "source-app", "default": true },
+    { "path": "target-app" }
+  ],
+  "name": "mwd26-integration",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "61.0"
+}
