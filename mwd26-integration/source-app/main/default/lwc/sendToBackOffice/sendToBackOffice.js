@@ -1,7 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
-import sendRequest from '@salesforce/apex/IntegrationRequestService.sendRequest';
+import sendToBackOffice from '@salesforce/apex/IntegrationRequestController.sendToBackOffice';
 
 export default class SendToBackOffice extends LightningElement {
     @api recordId;
@@ -10,17 +10,22 @@ export default class SendToBackOffice extends LightningElement {
     async handleSend() {
         this.isSending = true;
         try {
-            const result = await sendRequest({ recordId: this.recordId });
-            if (result && result.success) {
-                this.showToast('Success', result.message || 'Request sent to Back Office.', 'success');
+            const result = await sendToBackOffice({ recordId: this.recordId });
+            if (result && result.started) {
+                this.showToast(
+                    'Sync started',
+                    result.message || 'Sync started. Refresh the record in a few seconds to see the result.',
+                    'success'
+                );
             } else {
-                this.showToast('Send failed', (result && result.message) || 'Unknown error.', 'error', 'sticky');
+                // Not started (e.g. already synced) — informational, not an error.
+                this.showToast('Already synced', (result && result.message) || 'Nothing to send.', 'warning');
             }
         } catch (error) {
             this.showToast('Send failed', this.reduceError(error), 'error', 'sticky');
         } finally {
             this.isSending = false;
-            // Refresh the record so the updated Status / Response / Sync Date fields display.
+            // Refresh so the record shows the new "Sending" status straight away.
             getRecordNotifyChange([{ recordId: this.recordId }]);
         }
     }

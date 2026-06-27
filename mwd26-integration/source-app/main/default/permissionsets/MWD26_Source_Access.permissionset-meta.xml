@@ -4,7 +4,7 @@
     <description>Access to the Integration Request object, fields, Apex service, and tab for the MWD26 demo (Source Org).</description>
     <hasActivationRequired>false</hasActivationRequired>
     <classAccesses>
-        <apexClass>IntegrationRequestService</apexClass>
+        <apexClass>IntegrationRequestController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <externalCredentialPrincipalAccesses>
@@ -13,6 +13,15 @@
     </externalCredentialPrincipalAccesses>
     <objectPermissions>
         <object>Integration_Request__c</object>
+        <allowCreate>true</allowCreate>
+        <allowRead>true</allowRead>
+        <allowEdit>true</allowEdit>
+        <allowDelete>true</allowDelete>
+        <viewAllRecords>true</viewAllRecords>
+        <modifyAllRecords>true</modifyAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <object>Integration_Log__c</object>
         <allowCreate>true</allowCreate>
         <allowRead>true</allowRead>
         <allowEdit>true</allowEdit>
@@ -55,8 +64,87 @@
         <readable>true</readable>
         <editable>true</editable>
     </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Integration_Request__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Direction__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Integration_Name__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Endpoint__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.HTTP_Method__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Status__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Status_Code__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Request_Payload__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Response_Body__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Error_Message__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.External_Record_Id__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Queueable_Job_Id__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Correlation_Id__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Started_At__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Integration_Log__c.Completed_At__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
     <tabSettings>
         <tab>Integration_Request__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Integration_Log__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>
