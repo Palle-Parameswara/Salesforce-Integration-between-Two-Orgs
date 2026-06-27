@@ -69,7 +69,7 @@ request with **Status**, **External Record Id**, **Response Message**, and
 1. Deploy the `target-app` metadata (see §5).
 2. Assign the **MWD26 Target Access** permission set to the user that will
    authenticate the Named Credential.
-3. Create the **Connected App** — see §6 / `manual-setup/`.
+3. Create the **External Client App** — see §6 / `manual-setup/`.
 4. (Optional) Pre-load a few `External_Request__c` records to show an empty vs.
    populated state during the talk.
 
@@ -110,22 +110,26 @@ sf org assign permset -n MWD26_Source_Access -o MWD26_Source
 
 ---
 
-## 6. Manual Setup — Connected App / Auth Provider / Named Credential
+## 6. Manual Setup — External Client App / Auth Provider / Named Credential
 
 ⚠️ **These are NOT in source control** — they generate secrets and need an
 interactive login. Follow **[`manual-setup/NAMED_CREDENTIAL_SETUP.md`](manual-setup/NAMED_CREDENTIAL_SETUP.md)**.
 
+> **Note (Spring '26+):** classic Connected App creation is restricted —
+> use an **External Client App**. It still yields a Consumer Key/Secret + Callback
+> URL, so the Auth Provider / Named Credential steps are unchanged.
+
 Summary of the chain (full values/placeholders in that file):
 
-1. **Target Org** → Connected App → get **Consumer Key/Secret**.
+1. **Target Org** → External Client App → get **Consumer Key/Secret**.
 2. **Source Org** → Auth Provider `TargetOrgAuth` (uses the key/secret) → get **Callback URL**.
-3. **Target Org** → paste the Callback URL back into the Connected App.
+3. **Target Org** → paste the Callback URL back into the External Client App.
 4. **Source Org** → Named Credential **`Target_Org_NC`** (Named Principal, OAuth 2.0) → authenticate.
 
 🔒 **Security rules honored by this repo**
 - No org URLs, tokens, secrets, usernames, or passwords are committed.
 - The only endpoint reference in Apex is `callout:Target_Org_NC/...` (the Named Credential).
-- Connected App / Auth Provider / Named Credential stay manual; `.gitignore`
+- External Client App / Auth Provider / Named Credential stay manual; `.gitignore`
   keeps any local secret notes out of Git.
 
 ---
@@ -171,7 +175,7 @@ Or create one manually: **MWD26 Demo** app → **Integration Requests** tab →
 | Status stays **Draft** | The LWC/Apex couldn't run — check the user has **MWD26 Source Access** and the component is on the page. |
 | Target record not created | Authenticated Target user lacks access — assign **MWD26 Target Access** to that user (§4, §6 Step 5). |
 | `INVALID_FIELD` on deploy | Field API names must match exactly (`__c` suffixes); redeploy the `objects` directory first. |
-| Connected App "first use" delay | Newly created Connected Apps can take 2–10 minutes before OAuth works. |
+| External Client App not working yet | A newly created ECA can take up to ~30 minutes to activate. Also confirm **Policies → Permitted Users** allows self-authorization, and that **Require PKCE** is OFF. |
 
 ---
 

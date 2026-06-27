@@ -1,4 +1,4 @@
-# Manual Setup — Connected App, Auth Provider & Named Credential
+# Manual Setup — External Client App, Auth Provider & Named Credential
 
 These steps **cannot** be deployed via the CLI because they generate secrets
 (Consumer Key/Secret) and require an interactive OAuth login. Nothing here is
@@ -12,17 +12,28 @@ filled-in copy out of Git (see `.gitignore`).
 
 ---
 
-## STEP 1 — Connected App  → in the **TARGET** Org
-Setup → **App Manager** → **New Connected App** (classic):
-- Connected App Name: `MWD26 Integration`
+## STEP 1 — External Client App  → in the **TARGET** Org
+> As of **Spring '26**, creating classic Connected Apps is restricted — use an
+> **External Client App (ECA)**. It still provides a Consumer Key/Secret and a
+> Callback URL, so Steps 2–4 below are unchanged.
+
+Setup → Quick Find → **External Client App Manager** → **New External Client App**:
+- External Client App Name: `MWD26 Integration`
 - Contact Email: *(your email)*
-- ✅ **Enable OAuth Settings**
+- Distribution State: **Local**
+- Expand **API (Enable OAuth Settings)** → ✅ **Enable OAuth**
 - Callback URL (temporary): `https://login.salesforce.com/services/oauth2/callback`
 - Selected OAuth Scopes:
   - **Manage user data via APIs (api)**
   - **Perform requests at any time (refresh_token, offline_access)**
-- **Save** → wait 2–10 min → open app → **Manage Consumer Details** →
-  copy **Consumer Key** = `<CONSUMER_KEY>` and **Consumer Secret** = `<CONSUMER_SECRET>`.
+- **Security:** ✅ **Require Secret for Web Server Flow**.
+  ⚠️ Do **NOT** enable **Require PKCE** — the Salesforce Auth Provider flow does
+  not send a PKCE challenge and authentication will fail.
+- **Create** → the app can take up to ~10–30 min to become available.
+- Open the app → **Settings** → **OAuth Settings** → **Consumer Key and Secret**
+  → copy **Consumer Key** = `<CONSUMER_KEY>` and **Consumer Secret** = `<CONSUMER_SECRET>`.
+- Open the app → **Policies** tab → **Edit** → **OAuth Policies** →
+  **Permitted Users = "All users may self-authorize"** → Save.
 
 ## STEP 2 — Auth Provider  → in the **SOURCE** Org
 Setup → **Auth. Providers** → **New** → Provider Type = **Salesforce**:
@@ -34,9 +45,9 @@ Setup → **Auth. Providers** → **New** → Provider Type = **Salesforce**:
 - Default Scopes: `refresh_token full`
 - **Save** → copy the generated **Callback URL** = `<AUTH_PROVIDER_CALLBACK_URL>`.
 
-## STEP 3 — Update the Connected App callback  → back in the **TARGET** Org
-Edit the Connected App → replace the temporary Callback URL with
-`<AUTH_PROVIDER_CALLBACK_URL>` → Save.
+## STEP 3 — Update the External Client App callback  → back in the **TARGET** Org
+External Client App Manager → your app → **Edit Settings** → OAuth Settings →
+replace the temporary Callback URL with `<AUTH_PROVIDER_CALLBACK_URL>` → Save.
 
 ## STEP 4 — Named Credential  → in the **SOURCE** Org
 Setup → **Named Credentials** → **▾ next to New** → **New Legacy**
