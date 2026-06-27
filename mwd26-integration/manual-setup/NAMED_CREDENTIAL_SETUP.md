@@ -42,27 +42,57 @@ Setup → **Auth. Providers** → **New** → Provider Type = **Salesforce**:
 - Consumer Secret: `<CONSUMER_SECRET>`
 - Authorize Endpoint URL: `<TARGET_MY_DOMAIN_URL>/services/oauth2/authorize`
 - Token Endpoint URL: `<TARGET_MY_DOMAIN_URL>/services/oauth2/token`
-- Default Scopes: `refresh_token full`
+- Default Scopes: `api refresh_token`  ← must be a subset of the scopes the ECA grants (do NOT use `full`)
 - **Save** → copy the generated **Callback URL** = `<AUTH_PROVIDER_CALLBACK_URL>`.
 
 ## STEP 3 — Update the External Client App callback  → back in the **TARGET** Org
 External Client App Manager → your app → **Edit Settings** → OAuth Settings →
 replace the temporary Callback URL with `<AUTH_PROVIDER_CALLBACK_URL>` → Save.
 
-## STEP 4 — Named Credential  → in the **SOURCE** Org
-Setup → **Named Credentials** → **▾ next to New** → **New Legacy**
-*(the classic form — the new External Credential model needs extra steps to match `callout:Target_Org_NC`)*:
-- Label: `Target_Org_NC`
-- Name: **`Target_Org_NC`**  ← must match the Apex callout exactly
-- URL: `<TARGET_MY_DOMAIN_URL>`
-- Identity Type: **Named Principal**
-- Authentication Protocol: **OAuth 2.0**
-- Authentication Provider: **TargetOrgAuth**
-- Scope: `refresh_token full`
-- ✅ **Start Authentication Flow on Save**
-- **Save** → log in as the **Target Org** user → **Allow** → it should show
-  **Authenticated as …** ✅
+## STEP 4 — External Credential  → in the **SOURCE** Org
+Modern orgs use the **External Credential + Named Credential** model. Create the
+External Credential first.
 
-## STEP 5 — Assign Target access to the Named Principal
-In the **Target** Org, assign the **MWD26 Target Access** permission set to the
-user you authenticated with in Step 4 (so the callout can create records).
+Setup → **Named Credentials** → **External Credentials** tab → **New**:
+- Label / Name: `Target_Org_EC`
+- Authentication Protocol: **OAuth 2.0**
+- Authentication Flow Type: **Browser Flow**
+- Scope: `api refresh_token`
+- Authentication Provider: **TargetOrgAuth**
+- **Save**.
+
+Then on the External Credential detail page → **Principals** → **New**:
+- Parameter Name: `TargetPrincipal`
+- Sequence Number: `1`
+- Identity Type: **Named Principal**
+- **Save** → on the principal row, **▾ → Authenticate** → log in as the
+  **Target Org** user → **Allow** → status becomes **Authenticated** ✅
+
+## STEP 5 — Named Credential  → in the **SOURCE** Org
+Setup → **Named Credentials** → **Named Credentials** tab → **New**:
+- Label / Name: **`Target_Org_NC`**  ← must match the Apex callout exactly
+- URL: `<TARGET_MY_DOMAIN_URL>`
+- External Credential: **Target_Org_EC**
+- ✅ Enabled for Callouts
+- ✅ Generate Authorization Header
+- **Save**.
+
+## STEP 6 — Grant External Credential Principal Access  → in the **SOURCE** Org
+The new model requires a permission set to use the External Credential — **even
+for admins**. This repo's **MWD26 Source Access** permission set already includes
+it (`Target_Org_EC-TargetPrincipal`); just confirm it's assigned to the user that
+runs the callout. To add it manually: Permission Set → **External Credential
+Principal Access** → add **Target_Org_EC - TargetPrincipal**.
+
+## STEP 7 — Assign Target access  → in the **TARGET** Org
+Assign the **MWD26 Target Access** permission set to the user you authenticated
+with in Step 4 (so the callout can create `External_Request__c` records).
+
+---
+
+### Troubleshooting the auth chain
+- **`The external credential isn't fully configured`** → the principal isn't
+  authenticated (Step 4) **or** the running user lacks Principal Access (Step 6).
+  Re-authenticate and confirm the permission set.
+- **Authentication fails / `redirect_uri_mismatch`** → the ECA Callback URL
+  (Step 3) doesn't exactly match the Auth Provider Callback URL (Step 2).

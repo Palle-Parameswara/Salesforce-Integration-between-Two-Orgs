@@ -124,7 +124,9 @@ Summary of the chain (full values/placeholders in that file):
 1. **Target Org** → External Client App → get **Consumer Key/Secret**.
 2. **Source Org** → Auth Provider `TargetOrgAuth` (uses the key/secret) → get **Callback URL**.
 3. **Target Org** → paste the Callback URL back into the External Client App.
-4. **Source Org** → Named Credential **`Target_Org_NC`** (Named Principal, OAuth 2.0) → authenticate.
+4. **Source Org** → External Credential `Target_Org_EC` (OAuth 2.0, **Browser Flow**, Auth Provider `TargetOrgAuth`) → add a **Named Principal** → **Authenticate**.
+5. **Source Org** → Named Credential **`Target_Org_NC`** referencing `Target_Org_EC`.
+6. **Source Org** → grant **External Credential Principal Access** (already in the MWD26 Source Access permission set).
 
 🔒 **Security rules honored by this repo**
 - No org URLs, tokens, secrets, usernames, or passwords are committed.
@@ -169,11 +171,13 @@ Or create one manually: **MWD26 Demo** app → **Integration Requests** tab →
 
 | Symptom | Likely cause / fix |
 |---|---|
+| `The external credential isn't fully configured` | The Named Principal isn't authenticated, **or** the running user lacks **External Credential Principal Access**. Authenticate `Target_Org_EC` and confirm **MWD26 Source Access** is assigned (§6). |
 | `Unauthorized` / `401` on send | Named Credential not authenticated, or its name isn't exactly **`Target_Org_NC`**. Re-run the auth flow (§6). |
+| Auth fails / `redirect_uri_mismatch` | The ECA Callback URL doesn't match the Auth Provider Callback URL exactly. Copy it from the Auth Provider page into the ECA (§6 step 3). |
 | `404 Not Found` on callout | Apex REST not deployed to Target, or wrong path. Endpoint must be `/services/apexrest/mwd26/requests`. |
 | `You have uncommitted work pending` | A DML ran before the callout. The service is written callout-first on purpose — keep it that way. |
 | Status stays **Draft** | The LWC/Apex couldn't run — check the user has **MWD26 Source Access** and the component is on the page. |
-| Target record not created | Authenticated Target user lacks access — assign **MWD26 Target Access** to that user (§4, §6 Step 5). |
+| Target record not created | Authenticated Target user lacks access — assign **MWD26 Target Access** to that user (§4, §6 step 7). |
 | `INVALID_FIELD` on deploy | Field API names must match exactly (`__c` suffixes); redeploy the `objects` directory first. |
 | External Client App not working yet | A newly created ECA can take up to ~30 minutes to activate. Also confirm **Policies → Permitted Users** allows self-authorization, and that **Require PKCE** is OFF. |
 
@@ -187,7 +191,7 @@ mwd26-integration/
 ├─ README.md
 ├─ .gitignore
 ├─ manual-setup/
-│  └─ NAMED_CREDENTIAL_SETUP.md      # Connected App / Auth Provider / Named Credential (placeholders)
+│  └─ NAMED_CREDENTIAL_SETUP.md      # External Client App / Auth Provider / External Credential / Named Credential
 ├─ scripts/apex/
 │  └─ create_sample_request.apex     # sample test data
 ├─ source-app/main/default/          # → deploy to MWD26_Source

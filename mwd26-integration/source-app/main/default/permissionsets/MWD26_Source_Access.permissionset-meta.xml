@@ -7,6 +7,10 @@
         <apexClass>IntegrationRequestService</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <externalCredentialPrincipalAccesses>
+        <enabled>true</enabled>
+        <externalCredentialPrincipal>Target_Org_EC-TargetPrincipal</externalCredentialPrincipal>
+    </externalCredentialPrincipalAccesses>
     <objectPermissions>
         <object>Integration_Request__c</object>
         <allowCreate>true</allowCreate>
