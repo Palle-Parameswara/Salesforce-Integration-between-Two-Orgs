@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>External_Record_Id__c</fullName>
+    <label>External Record Id</label>
+    <description>Id of the External_Request__c record created in the Target Org.</description>
+    <type>Text</type>
+    <length>255</length>
+    <required>false</required>
+    <externalId>false</externalId>
+</CustomField>

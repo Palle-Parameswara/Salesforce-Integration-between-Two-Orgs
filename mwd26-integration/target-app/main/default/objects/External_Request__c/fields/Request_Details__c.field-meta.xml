@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Request_Details__c</fullName>
+    <label>Request Details</label>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>3</visibleLines>
+</CustomField>
