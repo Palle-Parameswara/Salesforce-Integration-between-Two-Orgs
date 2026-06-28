@@ -180,6 +180,10 @@ Or create one manually: **MWD26 Demo** app → **Integration Requests** tab →
    already-**Success** record → toast: *"This request is already synced to Back
    Office."* No second Target record, no callout.
 
+> **Two paths, one foundation.** Steps 1–7 are the **Developer Path** (LWC +
+> Queueable + Apex logging). For the **Admin Path** — the same integration driven
+> by a no-code **Screen Flow + HTTP Callout** — see **§11**.
+
 ---
 
 ## 9. Troubleshooting
@@ -231,6 +235,81 @@ via the lookup — drop it on the page layout if it isn't shown).
 
 ---
 
+## 11. Admin-Friendly Flow Demo (the "Admin Path")
+
+> Full build guide: **[`manual-setup/ADMIN_FLOW_SETUP.md`](manual-setup/ADMIN_FLOW_SETUP.md)**
+
+### 1. What this shows
+The **same** Target Org REST API and Named Credential, driven by an
+**admin-built Screen Flow** with the native **HTTP Callout in Flow** — *no Apex,
+no LWC*. It writes to the same `Integration_Request__c` and `Integration_Log__c`
+objects, so developers and admins share one integration foundation.
+
+### 2. How admins use Screen Flow + HTTP Callout
+A guided Screen Flow collects the request, creates the source record, calls the
+Target Org via the **HTTP Callout** action (which points at the existing
+**`Target_Org_NC`** Named Credential — so no URL or secret ever lives in the
+flow), then updates the record and writes an Integration Log — all with
+point-and-click elements.
+
+### 3. Setup steps (summary)
+1. Confirm **`Target_Org_NC`** exists and is authenticated (§6).
+2. In Flow Builder, **Create HTTP Callout** action → Named Credential
+   `Target_Org_NC`, **POST**, path `/services/apexrest/mwd26/requests`.
+3. Provide the **sample request/response JSON** (below) so Flow generates the
+   input/output structures.
+4. Build the Screen Flow `Admin_Assisted_Back_Office_Sync` (collect → create →
+   **Review & Send** screen → HTTP Callout → update + log → result screen).
+5. Surface it as a tab in the **MWD26 Demo** app (Lightning App Page with the
+   Flow component).
+
+**Sample request JSON**
+```json
+{
+  "requestName": "Admin entered request name",
+  "customerEmail": "admin@example.com",
+  "requestDetails": "Admin entered details",
+  "sourceRecordId": "a00XXXXXXXXXXXXXXX",
+  "sourceOrg": "Source"
+}
+```
+**Sample response JSON**
+```json
+{
+  "success": true,
+  "externalRecordId": "a00YYYYYYYYYYYYYYY",
+  "message": "Request received and processed by Back Office."
+}
+```
+
+> ⚙️ **Why a "Review & Send" screen?** Flow can't run a callout after a record
+> create in the same transaction. The screen between *Create record* and *HTTP
+> Callout* commits the DML, so the callout is legal — and it gives you the new
+> record Id for `sourceRecordId`.
+
+### 4. Demo steps
+1. Open **Admin Assisted Back Office Sync** (MWD26 Demo app tab).
+2. Enter Request Name, Customer Email, Request Details → **Next**.
+3. On **Review & Send**, click **Next** to fire the callout.
+4. **Success screen** shows the Source Request number, Target External Record Id,
+   and response message.
+5. Show the **Source** `Integration_Request__c` → Status **Success**.
+6. Show the **Target** `External_Request__c` (EXT-####) created.
+7. Show the **`Integration_Log__c`** row (Outbound, Success, payload + response).
+
+### 5. Failure demo
+Run the flow with an **invalid/blank Customer Email** so the Target returns
+**400**. The HTTP Callout's **Fault path** routes to: Source record → **Failed**,
+a **Failed** Integration Log (with the error message), and the failure screen.
+
+### 6. Speaker talking points
+- *"Admins get a guided, point-and-click experience."*
+- *"Developers still own the secure API and the reusable integration foundation."*
+- *"Named Credentials keep authentication completely out of the flow."*
+- *"Integration logs make troubleshooting easy — same audit trail for both paths."*
+
+---
+
 ## Project Structure
 
 ```
@@ -239,7 +318,8 @@ mwd26-integration/
 ├─ README.md
 ├─ .gitignore
 ├─ manual-setup/
-│  └─ NAMED_CREDENTIAL_SETUP.md      # External Client App / Auth Provider / External Credential / Named Credential
+│  ├─ NAMED_CREDENTIAL_SETUP.md      # External Client App / Auth Provider / External Credential / Named Credential
+│  └─ ADMIN_FLOW_SETUP.md           # Admin Path: Screen Flow + HTTP Callout build guide (no-code)
 ├─ scripts/apex/
 │  └─ create_sample_request.apex     # sample test data
 ├─ source-app/main/default/          # → deploy to MWD26_Source
