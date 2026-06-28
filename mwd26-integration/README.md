@@ -246,22 +246,28 @@ no LWC*. It writes to the same `Integration_Request__c` and `Integration_Log__c`
 objects, so developers and admins share one integration foundation.
 
 ### 2. How admins use Screen Flow + HTTP Callout
-A guided Screen Flow collects the request, creates the source record, calls the
-Target Org via the **HTTP Callout** action (which points at the existing
-**`Target_Org_NC`** Named Credential — so no URL or secret ever lives in the
-flow), then updates the record and writes an Integration Log — all with
-point-and-click elements.
+A Screen Flow on the **Integration Request record page** calls a small
+**`Back_Office_Callout`** subflow that uses the native **HTTP Callout** action
+pointed at the existing **`Target_Org_NC`** Named Credential — so no URL or secret
+ever lives in the flow. The flow then updates the record and writes an Integration
+Log, all point-and-click.
 
 ### 3. Setup steps (summary)
+**Two flows already ship as metadata** in `source-app/main/default/flows/`:
+- `Admin_Assisted_Back_Office_Sync` (Screen Flow) — complete.
+- `Back_Office_Callout` (autolaunched subflow) — a **placeholder** with a fixed
+  input/output contract.
+
+So the admin's only work is:
 1. Confirm **`Target_Org_NC`** exists and is authenticated (§6).
-2. In Flow Builder, **Create HTTP Callout** action → Named Credential
-   `Target_Org_NC`, **POST**, path `/services/apexrest/mwd26/requests`.
-3. Provide the **sample request/response JSON** (below) so Flow generates the
-   input/output structures.
-4. Build the Screen Flow `Admin_Assisted_Back_Office_Sync` (collect → create →
-   **Review & Send** screen → HTTP Callout → update + log → result screen).
-5. Surface it as a tab in the **MWD26 Demo** app (Lightning App Page with the
-   Flow component).
+2. Open **`Back_Office_Callout`** in Flow Builder → replace the placeholder with a
+   **Create HTTP Callout** action (Named Credential `Target_Org_NC`, **POST**, path
+   `/services/apexrest/mwd26/requests`) using the sample JSON below; map the
+   `in_*` inputs and set the `out_*` outputs (success + **Fault** paths).
+3. Add the **Flow** component (`Admin Assisted Back Office Sync`) to the
+   **Integration Request** record page.
+
+Full click-by-click: **[`manual-setup/ADMIN_FLOW_SETUP.md`](manual-setup/ADMIN_FLOW_SETUP.md)**.
 
 **Sample request JSON**
 ```json
@@ -282,18 +288,17 @@ point-and-click elements.
 }
 ```
 
-> ⚙️ **Why a "Review & Send" screen?** Flow can't run a callout after a record
-> create in the same transaction. The screen between *Create record* and *HTTP
-> Callout* commits the DML, so the callout is legal — and it gives you the new
-> record Id for `sourceRecordId`.
+> ⚙️ **Why it runs on the record page (not collect-and-create):** the flow operates
+> on an existing Integration Request, so the **callout is the first, DML-free
+> operation** — no "uncommitted work pending" issue — and the record Id is already
+> available for `sourceRecordId`.
 
 ### 4. Demo steps
-1. Open **Admin Assisted Back Office Sync** (MWD26 Demo app tab).
-2. Enter Request Name, Customer Email, Request Details → **Next**.
-3. On **Review & Send**, click **Next** to fire the callout.
-4. **Success screen** shows the Source Request number, Target External Record Id,
-   and response message.
-5. Show the **Source** `Integration_Request__c` → Status **Success**.
+1. Open an existing **Integration Request** record (Status **Draft**).
+2. Run **Admin Assisted Back Office Sync** from the record page (Flow component).
+3. On the **Confirm** screen, click **Next** to fire the callout.
+4. **Success screen** shows the Target External Record Id and response message.
+5. Refresh the **Source** `Integration_Request__c` → Status **Success**.
 6. Show the **Target** `External_Request__c` (EXT-####) created.
 7. Show the **`Integration_Log__c`** row (Outbound, Success, payload + response).
 
@@ -328,6 +333,7 @@ mwd26-integration/
 │  │            IntegrationRequestSyncQueueable(.cls + Test)
 │  │            IntegrationLogger.cls   IntegrationRequestDTO.cls
 │  ├─ lwc/sendToBackOffice/
+│  ├─ flows/  Admin_Assisted_Back_Office_Sync  Back_Office_Callout (Admin Path)
 │  ├─ tabs/ applications/ permissionsets/
 └─ target-app/main/default/          # → deploy to MWD26_Target
    ├─ objects/External_Request__c/
