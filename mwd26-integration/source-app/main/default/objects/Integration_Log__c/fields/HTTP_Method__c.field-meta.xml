@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HTTP_Method__c</fullName>
+    <label>HTTP Method</label>
+    <type>Picklist</type>
+    <required>false</required>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>GET</fullName>
+                <default>false</default>
+                <label>GET</label>
+            </value>
+            <value>
+                <fullName>POST</fullName>
+                <default>true</default>
+                <label>POST</label>
+            </value>
+            <value>
+                <fullName>PUT</fullName>
+                <default>false</default>
+                <label>PUT</label>
+            </value>
+            <value>
+                <fullName>PATCH</fullName>
+                <default>false</default>
+                <label>PATCH</label>
+            </value>
+            <value>
+                <fullName>DELETE</fullName>
+                <default>false</default>
+                <label>DELETE</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

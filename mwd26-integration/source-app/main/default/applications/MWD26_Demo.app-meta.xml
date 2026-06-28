@@ -6,4 +6,5 @@
     <uiType>Lightning</uiType>
     <formFactors>Large</formFactors>
     <tabs>Integration_Request__c</tabs>
+    <tabs>Integration_Log__c</tabs>
 </CustomApplication>

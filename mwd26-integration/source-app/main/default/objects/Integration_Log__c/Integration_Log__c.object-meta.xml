@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>MWD26 demo — integration log/audit record written by the Queueable for each Back Office sync attempt (Source Org).</description>
+    <enableActivities>false</enableActivities>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <label>Integration Log</label>
+    <pluralLabel>Integration Logs</pluralLabel>
+    <nameField>
+        <displayFormat>LOG-{00000}</displayFormat>
+        <label>Integration Log Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>
