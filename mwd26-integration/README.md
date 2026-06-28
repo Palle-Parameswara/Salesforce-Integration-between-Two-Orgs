@@ -295,20 +295,33 @@ Full click-by-click: **[`manual-setup/ADMIN_FLOW_SETUP.md`](manual-setup/ADMIN_F
 
 ### 4. Demo steps
 1. Open an existing **Integration Request** record (Status **Draft**).
-2. Run **Admin Assisted Back Office Sync** from the record page (Flow component).
+2. Run **Admin Assisted Back Office Sync** from the record (see the auto-refresh tip below).
 3. On the **Confirm** screen, click **Next** to fire the callout.
 4. **Success screen** shows the Target External Record Id and response message.
-5. Refresh the **Source** `Integration_Request__c` → Status **Success**.
+5. The **Source** `Integration_Request__c` → Status **Success**.
 6. Show the **Target** `External_Request__c` (EXT-####) created.
 7. Show the **`Integration_Log__c`** row (Outbound, Success, payload + response).
+
+> 🔄 **Auto-refresh tip:** an *embedded* Flow component updates the record but
+> won't refresh the page on its own (you'd refresh manually). Surface the flow as
+> a **Quick Action** (Object Manager → Integration Request → New Action → type
+> *Flow*) and add it to the page layout — Quick Action flows **refresh the record
+> automatically on finish**. See `manual-setup/ADMIN_FLOW_SETUP.md` Part 2.
 
 ### 5. Failure demo
 Run the flow with an **invalid/blank Customer Email** so the Target returns
 **400**. The HTTP Callout's **Fault path** routes to: Source record → **Failed**,
 a **Failed** Integration Log (with the error message), and the failure screen.
 
-### 6. Speaker talking points
-- *"Admins get a guided, point-and-click experience."*
+### 6. Is it really "no code"?
+**The admin path is 100% declarative** — no Apex, no LWC. It's a Screen Flow, an
+autolaunched subflow, the native **HTTP Callout** action, and a **Named
+Credential**. The admin builds and owns all of it in Flow Builder. It *calls* a
+Target Org Apex REST API a **developer** wrote — that's the foundation, not part of
+the admin's build. That split **is** the story.
+
+### 7. Speaker talking points
+- *"Admins get a guided, point-and-click experience — no code in the flow itself."*
 - *"Developers still own the secure API and the reusable integration foundation."*
 - *"Named Credentials keep authentication completely out of the flow."*
 - *"Integration logs make troubleshooting easy — same audit trail for both paths."*
@@ -333,7 +346,8 @@ mwd26-integration/
 │  │            IntegrationRequestSyncQueueable(.cls + Test)
 │  │            IntegrationLogger.cls   IntegrationRequestDTO.cls
 │  ├─ lwc/sendToBackOffice/
-│  ├─ flows/  Admin_Assisted_Back_Office_Sync  Back_Office_Callout (Admin Path)
+│  ├─ flows/  Admin_Assisted_Back_Office_Sync  Back_Office_Callout (Admin Path, working)
+│  ├─ externalServiceRegistrations/  BackOfficeService (HTTP Callout schema)
 │  ├─ tabs/ applications/ permissionsets/
 └─ target-app/main/default/          # → deploy to MWD26_Target
    ├─ objects/External_Request__c/

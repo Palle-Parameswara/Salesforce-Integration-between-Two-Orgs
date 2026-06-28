@@ -1,17 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>BackOfficeService</name>
+        <label>BackOfficeService</label>
+        <locationX>351</locationX>
+        <locationY>296</locationY>
+        <actionName>BackOfficeService.BackOfficeService1</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Set_Success_Outputs</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Failure_Outputs</targetReference>
+        </faultConnector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>requestBody</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>BackOfficeService.BackOfficeService1</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
     <apiVersion>61.0</apiVersion>
-    <description>MWD26 admin demo — PLACEHOLDER callout subflow. Keeps a stable input/output contract so the Screen Flow deploys. Open this in Flow Builder and replace the placeholder assignment with a native HTTP Callout action (POST callout:Target_Org_NC/services/apexrest/mwd26/requests) that maps the in_* inputs to the request body and sets the out_* outputs from the response. See manual-setup/ADMIN_FLOW_SETUP.md.</description>
-    <environments>Default</environments>
-    <interviewLabel>Back Office Callout {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Back Office Callout</label>
-    <processType>AutoLaunchedFlow</processType>
-    <status>Active</status>
     <assignments>
-        <name>Placeholder_Not_Configured</name>
-        <label>Placeholder Not Configured</label>
-        <locationX>176</locationX>
+        <name>Build_Request_Body</name>
+        <label>Build Request Body</label>
+        <locationX>367</locationX>
         <locationY>134</locationY>
+        <assignmentItems>
+            <assignToReference>requestBody.requestName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>in_requestName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>requestBody.customerEmail</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>in_customerEmail</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>requestBody.requestDetails</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>in_requestDetails</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>requestBody.sourceRecordId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>in_sourceRecordId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>requestBody.sourceOrg</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>in_sourceOrg</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>BackOfficeService</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Failure_Outputs</name>
+        <label>Set Failure Outputs</label>
+        <locationX>540</locationX>
+        <locationY>397</locationY>
         <assignmentItems>
             <assignToReference>out_success</assignToReference>
             <operator>Assign</operator>
@@ -23,24 +85,69 @@
             <assignToReference>out_errorMessage</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Back_Office_Callout is a placeholder. Add the HTTP Callout action in Flow Builder (see ADMIN_FLOW_SETUP.md).</stringValue>
+                <elementReference>$Flow.FaultMessage</elementReference>
             </value>
         </assignmentItems>
     </assignments>
+    <assignments>
+        <name>Set_Success_Outputs</name>
+        <label>Set Success Outputs</label>
+        <locationX>281</locationX>
+        <locationY>477</locationY>
+        <assignmentItems>
+            <assignToReference>out_success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>out_externalRecordId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>BackOfficeService.2XX.externalRecordId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>out_message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>BackOfficeService.2XX.message</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>out_statusCode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>201.0</numberValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>MWD26 admin demo — callout subflow. Builds the request body, calls the BackOfficeService HTTP Callout action (POST to Named Credential Target_Org_NC, path /services/apexrest/mwd26/requests), and returns out_* outputs. Fault path sets out_success=false and out_errorMessage. Inputs/outputs form a stable contract used by Admin_Assisted_Back_Office_Sync. See manual-setup/ADMIN_FLOW_SETUP.md.</description>
+    <environments>Default</environments>
+    <interviewLabel>Back Office Callout {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Back Office Callout</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Placeholder_Not_Configured</targetReference>
+            <targetReference>Build_Request_Body</targetReference>
         </connector>
     </start>
-    <variables>
-        <name>in_requestName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
+    <status>Active</status>
     <variables>
         <name>in_customerEmail</name>
         <dataType>String</dataType>
@@ -56,7 +163,7 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>in_sourceRecordId</name>
+        <name>in_requestName</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
@@ -70,8 +177,15 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>out_success</name>
-        <dataType>Boolean</dataType>
+        <name>in_sourceRecordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>out_errorMessage</name>
+        <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>true</isOutput>
@@ -99,10 +213,18 @@
         <scale>0</scale>
     </variables>
     <variables>
-        <name>out_errorMessage</name>
-        <dataType>String</dataType>
+        <name>out_success</name>
+        <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>requestBody</name>
+        <apexClass>ExternalService__BackOfficeService_BackOfficeService1_IN_body</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
 </Flow>

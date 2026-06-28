@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>BackOfficeService</label>
+    <namedCredentialReference>Target_Org_NC</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>backofficeservice1</name>
+    </operations>
+    <registrationProviderType>SchemaInferred</registrationProviderType>
+    <schema>{&quot;openapi&quot;:&quot;3.0.1&quot;,&quot;info&quot;:{&quot;title&quot;:&quot;BackOfficeService&quot;,&quot;description&quot;:&quot;&quot;},&quot;paths&quot;:{&quot;/services/apexrest/mwd26/requests&quot;:{&quot;post&quot;:{&quot;description&quot;:&quot;&quot;,&quot;operationId&quot;:&quot;BackOfficeService1&quot;,&quot;requestBody&quot;:{&quot;description&quot;:&quot;&quot;,&quot;content&quot;:{&quot;application/json&quot;:{&quot;schema&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;requestName&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;sourceRecordId&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;requestDetails&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;customerEmail&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;sourceOrg&quot;:{&quot;type&quot;:&quot;string&quot;}}}}},&quot;required&quot;:true},&quot;responses&quot;:{&quot;2XX&quot;:{&quot;description&quot;:&quot;&quot;,&quot;content&quot;:{&quot;application/json&quot;:{&quot;schema&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;success&quot;:{&quot;type&quot;:&quot;boolean&quot;},&quot;externalRecordId&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;message&quot;:{&quot;type&quot;:&quot;string&quot;}}}}}}}}}}}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;integrationFlags&quot;:null,&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>9</systemVersion>
+</ExternalServiceRegistration>

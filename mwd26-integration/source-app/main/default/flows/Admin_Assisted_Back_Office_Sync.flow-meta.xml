@@ -47,105 +47,16 @@
     <formulas>
         <name>fRequestPayload</name>
         <dataType>String</dataType>
-        <expression>'{"requestName":"' &amp; {!Get_Request.Request_Name__c} &amp; '","customerEmail":"' &amp; {!Get_Request.Customer_Email__c} &amp; '","requestDetails":"' &amp; {!Get_Request.Request_Details__c} &amp; '","sourceRecordId":"' &amp; {!recordId} &amp; '","sourceOrg":"Source"}'</expression>
+        <expression>&apos;{&quot;requestName&quot;:&quot;&apos; &amp; {!Get_Request.Request_Name__c} &amp; &apos;&quot;,&quot;customerEmail&quot;:&quot;&apos; &amp; {!Get_Request.Customer_Email__c} &amp; &apos;&quot;,&quot;requestDetails&quot;:&quot;&apos; &amp; {!Get_Request.Request_Details__c} &amp; &apos;&quot;,&quot;sourceRecordId&quot;:&quot;&apos; &amp; {!recordId} &amp; &apos;&quot;,&quot;sourceOrg&quot;:&quot;Source&quot;}&apos;</expression>
     </formulas>
     <formulas>
         <name>fResponseBody</name>
         <dataType>String</dataType>
-        <expression>'{"success":' &amp; IF({!vSuccess}, 'true', 'false') &amp; ',"externalRecordId":"' &amp; {!vExternalRecordId} &amp; '","message":"' &amp; {!vMessage} &amp; '"}'</expression>
+        <expression>&apos;{&quot;success&quot;:&apos; &amp; IF({!vSuccess}, &apos;true&apos;, &apos;false&apos;) &amp; &apos;,&quot;externalRecordId&quot;:&quot;&apos; &amp; {!vExternalRecordId} &amp; &apos;&quot;,&quot;message&quot;:&quot;&apos; &amp; {!vMessage} &amp; &apos;&quot;}&apos;</expression>
     </formulas>
     <interviewLabel>Admin Assisted Back Office Sync {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Admin Assisted Back Office Sync</label>
     <processType>Flow</processType>
-    <recordCreates>
-        <name>Log_Success</name>
-        <label>Log Success</label>
-        <locationX>50</locationX>
-        <locationY>854</locationY>
-        <connector>
-            <targetReference>Success_Screen</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>Integration_Request__c</field>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Direction__c</field>
-            <value>
-                <stringValue>Outbound</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Integration_Name__c</field>
-            <value>
-                <stringValue>Admin Assisted Back Office Sync</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Endpoint__c</field>
-            <value>
-                <stringValue>/services/apexrest/mwd26/requests</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>HTTP_Method__c</field>
-            <value>
-                <stringValue>POST</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status__c</field>
-            <value>
-                <stringValue>Success</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status_Code__c</field>
-            <value>
-                <elementReference>vStatusCode</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Request_Payload__c</field>
-            <value>
-                <elementReference>fRequestPayload</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Response_Body__c</field>
-            <value>
-                <elementReference>fResponseBody</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>External_Record_Id__c</field>
-            <value>
-                <elementReference>vExternalRecordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Correlation_Id__c</field>
-            <value>
-                <elementReference>$Flow.InterviewGuid</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Started_At__c</field>
-            <value>
-                <elementReference>varStartedAt</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Completed_At__c</field>
-            <value>
-                <elementReference>$Flow.CurrentDateTime</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Integration_Log__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
     <recordCreates>
         <name>Log_Failed</name>
         <label>Log Failed</label>
@@ -155,9 +66,15 @@
             <targetReference>Failure_Screen</targetReference>
         </connector>
         <inputAssignments>
-            <field>Integration_Request__c</field>
+            <field>Completed_At__c</field>
             <value>
-                <elementReference>recordId</elementReference>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Correlation_Id__c</field>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -167,15 +84,15 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Integration_Name__c</field>
-            <value>
-                <stringValue>Admin Assisted Back Office Sync</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>Endpoint__c</field>
             <value>
                 <stringValue>/services/apexrest/mwd26/requests</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Error_Message__c</field>
+            <value>
+                <elementReference>vErrorMessage</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -185,15 +102,15 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Status__c</field>
+            <field>Integration_Name__c</field>
             <value>
-                <stringValue>Failed</stringValue>
+                <stringValue>Admin Assisted Back Office Sync</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Status_Code__c</field>
+            <field>Integration_Request__c</field>
             <value>
-                <elementReference>vStatusCode</elementReference>
+                <elementReference>recordId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -209,9 +126,38 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Error_Message__c</field>
+            <field>Started_At__c</field>
             <value>
-                <elementReference>vErrorMessage</elementReference>
+                <elementReference>varStartedAt</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status_Code__c</field>
+            <value>
+                <elementReference>vStatusCode</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Integration_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Log_Success</name>
+        <label>Log Success</label>
+        <locationX>50</locationX>
+        <locationY>854</locationY>
+        <connector>
+            <targetReference>Success_Screen</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Completed_At__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -221,15 +167,69 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Direction__c</field>
+            <value>
+                <stringValue>Outbound</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Endpoint__c</field>
+            <value>
+                <stringValue>/services/apexrest/mwd26/requests</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>External_Record_Id__c</field>
+            <value>
+                <elementReference>vExternalRecordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>HTTP_Method__c</field>
+            <value>
+                <stringValue>POST</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Integration_Name__c</field>
+            <value>
+                <stringValue>Admin Assisted Back Office Sync</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Integration_Request__c</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Request_Payload__c</field>
+            <value>
+                <elementReference>fRequestPayload</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Response_Body__c</field>
+            <value>
+                <elementReference>fResponseBody</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Started_At__c</field>
             <value>
                 <elementReference>varStartedAt</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Completed_At__c</field>
+            <field>Status_Code__c</field>
             <value>
-                <elementReference>$Flow.CurrentDateTime</elementReference>
+                <elementReference>vStatusCode</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Success</stringValue>
             </value>
         </inputAssignments>
         <object>Integration_Log__c</object>
@@ -261,48 +261,6 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
-        <name>Update_Success</name>
-        <label>Update Success</label>
-        <locationX>50</locationX>
-        <locationY>734</locationY>
-        <connector>
-            <targetReference>Log_Success</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>Status__c</field>
-            <value>
-                <stringValue>Success</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>External_Record_Id__c</field>
-            <value>
-                <elementReference>vExternalRecordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Response_Message__c</field>
-            <value>
-                <elementReference>vMessage</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Last_Synced_Date__c</field>
-            <value>
-                <elementReference>$Flow.CurrentDateTime</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Integration_Request__c</object>
-    </recordUpdates>
-    <recordUpdates>
         <name>Update_Failed</name>
         <label>Update Failed</label>
         <locationX>300</locationX>
@@ -319,9 +277,9 @@
             </value>
         </filters>
         <inputAssignments>
-            <field>Status__c</field>
+            <field>Last_Synced_Date__c</field>
             <value>
-                <stringValue>Failed</stringValue>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -331,9 +289,51 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Integration_Request__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Success</name>
+        <label>Update Success</label>
+        <locationX>50</locationX>
+        <locationY>734</locationY>
+        <connector>
+            <targetReference>Log_Success</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>External_Record_Id__c</field>
+            <value>
+                <elementReference>vExternalRecordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Last_Synced_Date__c</field>
             <value>
                 <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Response_Message__c</field>
+            <value>
+                <elementReference>vMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Success</stringValue>
             </value>
         </inputAssignments>
         <object>Integration_Request__c</object>
@@ -358,22 +358,6 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
-        <name>Success_Screen</name>
-        <label>Success</label>
-        <locationX>50</locationX>
-        <locationY>974</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <fields>
-            <name>Success_Text</name>
-            <fieldText>Back Office Sync completed successfully. External Record Id: {!vExternalRecordId}. Response: {!vMessage}</fieldText>
-            <fieldType>DisplayText</fieldType>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
         <name>Failure_Screen</name>
         <label>Failure</label>
         <locationX>300</locationX>
@@ -384,6 +368,22 @@
         <fields>
             <name>Failure_Text</name>
             <fieldText>Back Office Sync failed. Error: {!vErrorMessage}</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Success_Screen</name>
+        <label>Success</label>
+        <locationX>50</locationX>
+        <locationY>974</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Success_Text</name>
+            <fieldText>Back Office Sync completed successfully. External Record Id: {!vExternalRecordId}. Response: {!vMessage}</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -472,8 +472,8 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>vSuccess</name>
-        <dataType>Boolean</dataType>
+        <name>vErrorMessage</name>
+        <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
@@ -501,8 +501,8 @@
         <scale>0</scale>
     </variables>
     <variables>
-        <name>vErrorMessage</name>
-        <dataType>String</dataType>
+        <name>vSuccess</name>
+        <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
