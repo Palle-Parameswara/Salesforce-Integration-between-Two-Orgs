@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>MWD26 demo — Platform Event (pub/sub) announcing the outcome of a Back Office sync. Standalone example; not wired into the LWC/Queueable/Flow paths.</description>
+    <eventType>HighVolume</eventType>
+    <label>Sync Notification</label>
+    <pluralLabel>Sync Notifications</pluralLabel>
+    <publishBehavior>PublishAfterCommit</publishBehavior>
+</CustomObject>
