@@ -7,8 +7,6 @@
     <columns>Request_Name__c</columns>
     <columns>Customer_Email__c</columns>
     <columns>Processing_Status__c</columns>
-    <columns>Source_Record_Id__c</columns>
     <columns>Source_Org__c</columns>
-    <columns>Response_Message__c</columns>
     <columns>CREATED_DATE</columns>
 </ListView>
